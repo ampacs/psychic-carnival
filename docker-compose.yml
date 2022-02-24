@@ -1,0 +1,54 @@
+version: '3.3'
+services:
+
+  # Needed by Kafka
+  
+  zookeeper:
+    image: wurstmeister/zookeeper
+
+  # This sets up the Kafka container configuring two listeners:
+  #
+  # - One for internal access within the docker-compose application (port 9092)
+  # - One for external access from outside (port 9094)
+  #
+  # You should not have to change any of this configuration. Uncomment the right
+  # KAFKA_BROKER constant in consumers/consumer.py to choose either one.
+  
+  kafka:
+    image: wurstmeister/kafka
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://localhost:9094
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    depends_on:
+      - "zookeeper"
+    # Expose port 9094 for connecting from outside of the Docker container
+    ports:
+      - target: 9094
+        published: 9094
+        protocol: tcp
+        mode: host
+
+  # The datafeed component sends simulated messages to the Kafka bus
+  datafeed:
+    build: datafeed
+    environment:
+      PYTHONUNBUFFERED: 1
+    volumes:
+      - ./images:/images
+  
+  # Example Python consumer (enabled by default)
+  consumer:
+    build: consumer
+    environment:
+      PYTHONUNBUFFERED: 1
+
+  # Example Golang consumer (uncomment the following service if you want to use
+  # the Golang consumer)
+  #
+  # go_consumer:
+  #   build: go_consumer
+
+  # Add you new services such as a GUI or middleware here
