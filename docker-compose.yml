@@ -2,7 +2,7 @@ version: '3.3'
 services:
 
   # Needed by Kafka
-  
+
   zookeeper:
     image: wurstmeister/zookeeper
 
@@ -13,7 +13,7 @@ services:
   #
   # You should not have to change any of this configuration. Uncomment the right
   # KAFKA_BROKER constant in consumers/consumer.py to choose either one.
-  
+
   kafka:
     image: wurstmeister/kafka
     environment:
@@ -38,17 +38,22 @@ services:
       PYTHONUNBUFFERED: 1
     volumes:
       - ./images:/images
-  
+
   # Example Python consumer (enabled by default)
-  consumer:
-    build: consumer
-    environment:
-      PYTHONUNBUFFERED: 1
+  # consumer:
+  #   build: consumer
+  #   environment:
+  #     PYTHONUNBUFFERED: 1
 
   # Example Golang consumer (uncomment the following service if you want to use
   # the Golang consumer)
-  #
-  # go_consumer:
-  #   build: go_consumer
+  go_consumer:
+    build: go_consumer
+    ports:
+      - "8081:80"
 
   # Add you new services such as a GUI or middleware here
+  frontend:
+    build: frontend
+    ports:
+      - "8080:80"
