@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random Messages!</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Messages</h1>
+    <div style="display: flex">
+        <div>Count:</div>
+        <div id="message-count" style="flex: 1; margin-left: 1em">0</div>
+    </div>
+
+    <div style="display: flex">
+        <div>Average Weight:</div>
+        <div id="average-weight" style="flex: 1; margin-left: 1em">0</div>
+    </div>
+
+    <script>
+        const messageCount = document.getElementById("message-count");
+        const averageWeight = document.getElementById("average-weight");
+        setInterval(function () {
+            $.get("http://localhost:8081/count", data => {
+                const response = JSON.parse(data);
+                messageCount.innerHTML = response.count ?? 0;
+            });
+            $.get("http://localhost:8081/average-weight", data => {
+                const response = JSON.parse(data);
+                averageWeight.innerHTML = response.average_weight ?? 0
+            });
+        }, 500);
+    </script>
+</body>
+</html>
