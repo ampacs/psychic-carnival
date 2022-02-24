@@ -8,7 +8,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 ## Build application
-COPY main.go ./
+COPY . ./
 RUN go build -tags static_all,musl -o main .
 
 
