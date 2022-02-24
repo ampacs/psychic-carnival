@@ -1,4 +1,4 @@
-module gitlab.com/zero-foodwaste/coding_assignments/dev_kafka/go_consumer
+module github.com/ampacs/psychic-carnival/go_consumer
 
 go 1.14
 
