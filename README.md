@@ -60,6 +60,8 @@ consumer_1   | Received a message on topic picture: {'picture_id': '000000460347
 ...
 ```
 
+You should now be able to go to http://localhost:8080, and see the messages count and average weight updating periodically. 
+
 If you do not have this installed yet, use the following instructions:
 
 #### Ubuntu
